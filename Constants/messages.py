@@ -14,3 +14,4 @@ demoAccountConnect = "Connected to MetaTrader"
 demoAccountFailed = "Failed to connect"
 
 metaTraderDemoServer = "MetaQuotes-Demo"
+accountFailed = "initialize() failed, error code ="
