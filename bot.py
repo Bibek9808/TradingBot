@@ -7,6 +7,6 @@ login = input(messages.yesNoDialogueBox)
 if(login == "Yes"):
     userName = input(messages.enterLoginName)
     password = input(messages.enterPassword)
-    connect_to_metatrader(userName,password)
+    connect_to_metatrader()
 else:
     print(messages.byeMessage)
