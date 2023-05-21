@@ -1,14 +1,20 @@
 import MetaTrader5 as  mt5
 from Constants import messages
 from Pages import navigate
+import json
 
-def connect_to_metatrader(account, password):
+# Load the configuration from the file
+with open('botSettings.json') as config_file:
+    config = json.load(config_file)
+
+# Access the configuration values
+id = config['login']
+login_password = config['password']
+server = config['server']    
+
+def connect_to_metatrader():
     mt5.initialize()
-    server="MetaQuotes-Demo"
-# Login to the MT5 account
-
-    # Enter your login and password . Server remains the same
-    authorized = mt5.login(login=5013417401, server=server, password="hsiar5is")
+    authorized = mt5.login(login=id, server=server, password=login_password)    
 
     if authorized:
         print(messages.demoAccountConnect)
