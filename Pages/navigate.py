@@ -17,19 +17,20 @@ def SetTimeZone():
  # Define the timezone for UTC-4 (Eastern Daylight Time)
 
 # Get the current time in UTC-4
-    # utc_from = datetime(dateFrom, tzinfo=timezone)
-    # utc_to = datetime(dateTo, tzinfo=timezone)
+    #under development
+    utc_from = datetime(dateFrom, tzinfo=timezone)
+    utc_to = datetime(dateTo, tzinfo=timezone)
     # timestamp_from = int(utc_from.timestamp())
     # timestamp_to = int(utc_to.timestamp())
     # Convert dateFrom and dateTo to UTC timestamps
-    utc_from = timezone.localize(datetime(*dateFrom)).astimezone(pytz.utc)
-    utc_to = timezone.localize(datetime(*dateTo)).astimezone(pytz.utc)
+    # utc_from = timezone.localize(datetime(*dateFrom)).astimezone(pytz.utc)
+    # utc_to = timezone.localize(datetime(*dateTo)).astimezone(pytz.utc)
 
-    # Convert UTC timestamps to integers
-    timestamp_from = int(utc_from.timestamp())
-    timestamp_to = int(utc_to.timestamp())
+    # # Convert UTC timestamps to integers
+    # timestamp_from = int(utc_from.timestamp())
+    # timestamp_to = int(utc_to.timestamp())
     
-    GetRates(timestamp_from, timestamp_to)
+    GetRates(utc_from, utc_to)
 
 def GetRates(dateFrom,utcTo):
 
