@@ -2,7 +2,14 @@ import MetaTrader5 as  mt5
 import pandas as pd
 import pytz
 from datetime import datetime
+import json
 
+
+with open('botSettings.json') as config_file:
+    config = json.load(config_file)
+
+dateFrom = config['utc_from']
+dateTo = config['utc_to']    
 
 def SetTimeZone():
     # set time zone to UTC
@@ -10,9 +17,19 @@ def SetTimeZone():
  # Define the timezone for UTC-4 (Eastern Daylight Time)
 
 # Get the current time in UTC-4
-    utc_from = datetime(2022, 1, 1, tzinfo=timezone)
-    utc_to = datetime(2023, 1, 1, tzinfo=timezone)
-    GetRates(utc_from, utc_to)
+    # utc_from = datetime(dateFrom, tzinfo=timezone)
+    # utc_to = datetime(dateTo, tzinfo=timezone)
+    # timestamp_from = int(utc_from.timestamp())
+    # timestamp_to = int(utc_to.timestamp())
+    # Convert dateFrom and dateTo to UTC timestamps
+    utc_from = timezone.localize(datetime(*dateFrom)).astimezone(pytz.utc)
+    utc_to = timezone.localize(datetime(*dateTo)).astimezone(pytz.utc)
+
+    # Convert UTC timestamps to integers
+    timestamp_from = int(utc_from.timestamp())
+    timestamp_to = int(utc_to.timestamp())
+    
+    GetRates(timestamp_from, timestamp_to)
 
 def GetRates(dateFrom,utcTo):
 
@@ -25,12 +42,12 @@ def GetRates(dateFrom,utcTo):
    # convert time in seconds into the datetime format
     hourly_rates_frame['time']=pd.to_datetime(hourly_rates_frame['time'], unit='s')     
     print("\nDisplay dataframe with data for hourly candle")
-    print(hourly_rates_frame.head(24))
+    print(hourly_rates_frame)
 
     #data rates of 15 minutes candle
     quarter_mins_rates = mt5.copy_rates_range("GBPJPY", mt5.TIMEFRAME_M15, dateFrom, utcTo)
     quarter_mins_rates = pd.DataFrame(quarter_mins_rates)
     quarter_mins_rates['time']=pd.to_datetime(quarter_mins_rates['time'], unit='s')     
     print("\nDisplay dataframe with data for 15 minutes candle")
-    print(quarter_mins_rates.head(24))
+    print(quarter_mins_rates)
 
