@@ -4,6 +4,9 @@ import pytz
 from datetime import datetime
 import json
 
+from backtesting import Strategy, Backtest
+
+from BackTesting.strategyOne import StrategyOneBackTesting
 
 with open('botSettings.json') as config_file:
     config = json.load(config_file)
@@ -24,14 +27,14 @@ def SetTimeZone():
     # # Convert UTC timestamps to integers
     timestamp_from = int(utc_from.timestamp())
     timestamp_to = int(utc_to.timestamp())
-    
-    GetRates(timestamp_from, timestamp_to)
+    dataForBackTesting = GetRates(timestamp_from, timestamp_to)
+    # Access the first and second index values
+    hourlyValue = dataForBackTesting[0]
+    quarterminsValue = dataForBackTesting[1]    
+    strategy = StrategyOneBackTesting(hourlyValue, quarterminsValue)
 
 def GetRates(dateFrom,utcTo):
 
-    #data rates of 15 minutes candle 
-    # quarter_mins_rates_frame = 
-    #data rates of hourly candle
     hourly_rates = mt5.copy_rates_range("GBPJPY", mt5.TIMEFRAME_H1, dateFrom, utcTo)
     # create DataFrame out of the obtained data
     hourly_rates_frame = pd.DataFrame(hourly_rates)
@@ -40,10 +43,13 @@ def GetRates(dateFrom,utcTo):
     print("\nDisplay dataframe with data for hourly candle")
     print(hourly_rates_frame)
 
+
     #data rates of 15 minutes candle
     quarter_mins_rates = mt5.copy_rates_range("GBPJPY", mt5.TIMEFRAME_M15, dateFrom, utcTo)
     quarter_mins_rates = pd.DataFrame(quarter_mins_rates)
     quarter_mins_rates['time']=pd.to_datetime(quarter_mins_rates['time'], unit='s')     
     print("\nDisplay dataframe with data for 15 minutes candle")
     print(quarter_mins_rates)
+
+    return (hourly_rates_frame, quarter_mins_rates)
 
