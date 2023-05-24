@@ -20,7 +20,7 @@ def connect_to_metatrader():
         print(messages.demoAccountConnect)
         account_info = mt5.account_info()
         print(account_info)
-        navigate.SetTimeZone()
+        navigate.GetDataForBackTesting()
 
 
     elif not mt5.initialize():
