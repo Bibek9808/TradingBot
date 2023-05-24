@@ -3,6 +3,8 @@ import pandas as pd
 import pytz
 from datetime import datetime
 import json
+from backtesting import Backtest, Strategy
+from backtesting.lib import resample_apply
 
 
 with open('botSettings.json') as config_file:
@@ -38,12 +40,16 @@ def GetRates(dateFrom,utcTo):
    # convert time in seconds into the datetime format
     hourly_rates_frame['time']=pd.to_datetime(hourly_rates_frame['time'], unit='s')     
     print("\nDisplay dataframe with data for hourly candle")
-    print(hourly_rates_frame)
+    # print(hourly_rates_frame)
+    #data preparation
+    selected_columns_hourly_rates_frame = hourly_rates_frame[['time', 'open', 'high', 'low']]
+    print(selected_columns_hourly_rates_frame)
 
     #data rates of 15 minutes candle
     quarter_mins_rates = mt5.copy_rates_range("GBPJPY", mt5.TIMEFRAME_M15, dateFrom, utcTo)
     quarter_mins_rates = pd.DataFrame(quarter_mins_rates)
     quarter_mins_rates['time']=pd.to_datetime(quarter_mins_rates['time'], unit='s')     
     print("\nDisplay dataframe with data for 15 minutes candle")
-    print(quarter_mins_rates)
+    selected_columns_quarter_mins_rates = quarter_mins_rates[['time', 'open', 'high', 'low']]
+    print(selected_columns_quarter_mins_rates)
 
