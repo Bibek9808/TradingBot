@@ -2,7 +2,6 @@ import MetaTrader5 as  mt5
 from Constants import messages
 from Pages import navigate
 import json
-
 from Pages.navigate import GetDataForBackTesting
 
 # Load the configuration from the file

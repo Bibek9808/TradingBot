@@ -3,12 +3,10 @@ import pandas as pd
 import pytz
 from datetime import datetime
 import json
-from backtesting import Backtest, Strategy
+from backtesting import Backtest
 from backtesting.lib import resample_apply
-
-# from TestingStrategy.backtestingStrategy import StrategyOne
-
-
+from backtesting.test import SMA, GOOG
+from TestingStrategy.backtestingStrategy import  OurStrategy as strategy
 
 with open('botSettings.json') as config_file:
     config = json.load(config_file)
@@ -41,6 +39,12 @@ def StartBackTesting(hourlyData, quarterMinsData):
     print(quarterMinsData)
     #connect the strategy class here
     # strategy = StrategyOne(hourlyData, quarterMinsData)
+    #work on inserting our data in backtesting variable
+    bt = Backtest(GOOG, strategy,
+              cash=10000, commission=.002,
+              exclusive_orders=True) 
+    output = bt.run()
+    bt.plot()   
     
 
 def GetRatesHourly(dateFrom,utcTo):
