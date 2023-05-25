@@ -3,6 +3,8 @@ from Constants import messages
 from Pages import navigate
 import json
 
+from Pages.navigate import GetDataForBackTesting
+
 # Load the configuration from the file
 with open('botSettings.json') as config_file:
     config = json.load(config_file)
@@ -20,7 +22,8 @@ def connect_to_metatrader():
         print(messages.demoAccountConnect)
         account_info = mt5.account_info()
         print(account_info)
-        navigate.GetDataForBackTesting()
+        hourly_data, quarter_mins_data = GetDataForBackTesting()
+        navigate.StartBackTesting(hourly_data,quarter_mins_data)
 
 
     elif not mt5.initialize():
