@@ -1,24 +1,14 @@
+from backtesting.lib import crossover
 from backtesting import Backtest, Strategy
-from backtesting.lib import resample_apply
-from backtesting.test import GOOG
-import talib
+from datetime import datetime, timedelta
 
-# class StrategyOne(Strategy):
-#     def init(self):
-#         # return super().init()
-#         self.range_high = None
-#         self.range_low = None
-#         self.retest_candle = None
-#         self.is_range_broken = False
-#         pass
-#     def next(self):
-#         # return super().next()
-#         pass
-class RsiOscillator(Strategy):
+from backtesting.test import SMA, GOOG
+class OurStrategy(Strategy):
     def init(self):
-        self.rsi = self.
+        self.range_high = None
+        self.range_low = None
+        self.retest_candle = None
+        self.is_range_broken = False
+
     def next(self):
-        return
-    
-
-
+        pass
