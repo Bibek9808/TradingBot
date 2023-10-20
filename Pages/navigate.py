@@ -7,6 +7,7 @@ from backtesting import Backtest, Strategy
 from backtesting.lib import resample_apply
 
 # from TestingStrategy.backtestingStrategy import StrategyOne
+from TestingStrategy.backtestingStrategy import MyStrategy
 
 
 
@@ -25,22 +26,47 @@ def GetDataForBackTesting():
     timestamp_from = int(utc_from.timestamp())
     timestamp_to = int(utc_to.timestamp())
 
-    hourly_data = pd.DataFrame(GetRatesHourly(timestamp_from,timestamp_to))
-    hourly_data['time']=pd.to_datetime(hourly_data['time'], unit='s')     
-
     quarter_mins_data = pd.DataFrame(GetRatesQuarterMins(timestamp_from,timestamp_to))
+    quarter_mins_data['open'] = pd.to_numeric(quarter_mins_data['open'], errors='coerce')
+
+    # quarter_mins_data['open'] = pd.to_numeric()
     quarter_mins_data['time']=pd.to_datetime(quarter_mins_data['time'], unit='s')       
 
-    return hourly_data, quarter_mins_data
+    return quarter_mins_data
 
-def StartBackTesting(hourlyData, quarterMinsData):
-    print("\nDisplay dataframe with data for hourly candle")
-    print(hourlyData)
-
-    print("\nDisplay dataframe with data for 15 minutes candle")
+def StartBackTesting(quarterMinsData):
+    # Print the provided 15-minute data
     print(quarterMinsData)
-    #connect the strategy class here
-    # strategy = StrategyOne(hourlyData, quarterMinsData)
+    print(type(quarterMinsData))
+    # strategy = MyStrategy(broker= any,data= quarterMinsData, params=any)
+    # strategy_params = {
+    #     'broker': 'MetaQuotes-Demo',
+    #     'data': quarterMinsData,
+    #     'params': {}
+    # }
+    # strategy = MyStrategy(**strategy_params)
+    
+    # Now you can use the 'strategy' instance to run your backtest or perform other actions
+    # For example, you can create a Backtest instance and run it using the 'strategy'
+    
+    # Define column names
+    columns = ['time','open', 'high', 'low', 'close', 'tick_volume']
+    # Convert quarterMinsData to pandas DataFrame
+    df = pd.DataFrame(quarterMinsData, columns=columns)
+    #mapping the dataframe
+    # to do add time to the mapping as well 
+    df = df.rename(columns={
+                                'open': 'Open', 
+                                'high': 'High', 
+                                'low': 'Low', 
+                                'close': 'Close', 
+                                'tick_volume': 'Volume'
+                            })
+    bt = Backtest(data = df, strategy= MyStrategy)
+    result = bt.run()
+    
+    # Print the results
+    print(result)      
     
 
 def GetRatesHourly(dateFrom,utcTo):
@@ -58,7 +84,7 @@ def GetRatesQuarterMins(dateFrom,utcTo):
     quarter_mins_rates = pd.DataFrame(quarter_mins_rates)
     quarter_mins_rates['time']=pd.to_datetime(quarter_mins_rates['time'], unit='s')     
     print("\nDisplay dataframe with data for 15 minutes candle")
-    selected_columns_quarter_mins_rates = quarter_mins_rates[['time', 'open', 'high', 'low', 'tick_volume']]
+    selected_columns_quarter_mins_rates = quarter_mins_rates[['time', 'open', 'high', 'low','close','tick_volume']]
     return selected_columns_quarter_mins_rates
 
 

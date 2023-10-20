@@ -22,8 +22,8 @@ def connect_to_metatrader():
         print(messages.demoAccountConnect)
         account_info = mt5.account_info()
         print(account_info)
-        hourly_data, quarter_mins_data = GetDataForBackTesting()
-        navigate.StartBackTesting(hourly_data,quarter_mins_data)
+        quarter_mins_data = GetDataForBackTesting()
+        navigate.StartBackTesting(quarter_mins_data)
 
 
     elif not mt5.initialize():
